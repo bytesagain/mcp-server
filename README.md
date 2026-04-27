@@ -1,74 +1,84 @@
 # BytesAgain MCP Server
 
-> Search 60,000+ AI agent skills directly from your agent via MCP.
+[![bytesagain/mcp-server MCP server](https://glama.ai/mcp/servers/bytesagain/mcp-server/badges/score.svg)](https://glama.ai/mcp/servers/bytesagain/mcp-server)
+
+Search 60,000+ AI agent skills directly from any MCP-compatible agent.
 
 ## Overview
 
-BytesAgain is a free MCP-compatible skill search server that aggregates AI agent skills from ClawHub, LobeHub, Dify, GitHub, and more — all searchable via a single MCP endpoint.
+BytesAgain is a free MCP server for discovering AI agent skills and workflow use cases across ClawHub, LobeHub, Dify, GitHub-indexed skills, and the BytesAgain curated catalog.
 
-## Endpoints
+This repository contains a real stdio MCP server wrapper. It exposes compact tools to agents and forwards read-only requests to the public BytesAgain API at `https://bytesagain.com/api/mcp`.
 
-### MCP SSE (Model Context Protocol)
+## MCP Tools
+
+| Tool | When to use | Returns |
+| --- | --- | --- |
+| `search_skills` | Find AI skills for a concrete task, keyword, domain, or integration request. Supports English, Chinese, Japanese, Korean, German, French, Spanish, and Portuguese. | Ranked skill summaries with slug, name, description, category, tags, downloads, owner, and relevance fields. |
+| `get_skill` | Fetch full details for a specific slug returned by `search_skills` or `popular_skills`. | Detailed skill metadata, install/source links, category, tags, owner, downloads, stars, and related fields when available. |
+| `popular_skills` | Browse trending or high-download skills when the user has no specific task in mind. | Top skills ranked by downloads. |
+| `search_use_cases` | Search workflow/use-case pages such as “write weekly reports”, “build dashboards”, or “automate ecommerce listings”. | Use-case pages and descriptions that map real-world tasks to relevant skills. |
+
+## Install
+
+### Run with npx
+
+```bash
+npx -y github:bytesagain/mcp-server
 ```
-https://bytesagain.com/api/mcp/sse
+
+### Run from source
+
+```bash
+git clone https://github.com/bytesagain/mcp-server.git
+cd mcp-server
+npm install
+npm start
 ```
 
-### REST API
+### Docker
+
+```bash
+docker build -t bytesagain-mcp .
+docker run --rm -i bytesagain-mcp
 ```
-GET https://bytesagain.com/api/mcp?action=search&q=<query>
-```
 
-## Features
-
-- 🔍 **60,000+ skills** indexed from major platforms
-- 🌐 **7 languages**: English, Chinese, Japanese, Korean, German, French, Portuguese/Spanish
-- ⚡ **MCP SSE** compatible with Claude, Cursor, and any MCP-enabled agent
-- 🆓 **Free**, no API key, no auth required
-- 📊 Includes downloads, stars, ratings, and source metadata
-
-## Usage
-
-### With Claude Desktop
-
-Add to your `claude_desktop_config.json`:
+## Claude Desktop configuration
 
 ```json
 {
   "mcpServers": {
     "bytesagain": {
-      "url": "https://bytesagain.com/api/mcp/sse",
-      "type": "sse"
+      "command": "npx",
+      "args": ["-y", "github:bytesagain/mcp-server"]
     }
   }
 }
 ```
 
-### With Cursor
+## Environment variables
 
-Add to MCP settings:
-```
-https://bytesagain.com/api/mcp/sse
-```
+| Variable | Default | Description |
+| --- | --- | --- |
+| `BYTESAGAIN_API_BASE` | `https://bytesagain.com/api/mcp` | Optional override for the public BytesAgain API endpoint. |
 
-### REST API Example
+No API key is required. The server is read-only and does not write to BytesAgain, GitHub, Glama, or third-party services.
+
+## Public endpoints
+
+- Website: <https://bytesagain.com>
+- MCP documentation: <https://bytesagain.com/mcp>
+- Hosted MCP endpoint: <https://bytesagain.com/api/mcp>
+- REST search example: <https://bytesagain.com/api/mcp?action=search&q=video%20editor>
+
+## Development
 
 ```bash
-curl "https://bytesagain.com/api/mcp?action=search&q=video+editor"
+npm install
+npm test
 ```
 
-### Available MCP Tools
-
-| Tool | Description |
-|------|-------------|
-| `search_skills` | Search skills by keyword or natural language query |
-| `get_skill` | Get detailed info about a specific skill |
-| `list_categories` | List all available skill categories |
-
-## Links
-
-- 🌐 Website: [bytesagain.com](https://bytesagain.com)
-- 🔌 MCP Endpoint: [bytesagain.com/mcp](https://bytesagain.com/mcp)
-- 📦 Skill Search: [bytesagain.com/skills](https://bytesagain.com/skills)
+The smoke test starts the MCP server over stdio and verifies that the tool list is exposed correctly.
 
 ## License
 

@@ -1,0 +1,27 @@
+{
+  "name": "@bytesagain/mcp-server",
+  "version": "1.1.0",
+  "description": "MCP stdio wrapper for BytesAgain AI skill search API.",
+  "type": "module",
+  "bin": {
+    "bytesagain-mcp": "src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node scripts/smoke-test.js"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "ai-skills",
+    "bytesagain",
+    "skill-search"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.18.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
