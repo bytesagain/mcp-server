@@ -24,7 +24,7 @@ This repository contains a real stdio MCP server wrapper. It exposes compact too
 ### Run with npx
 
 ```bash
-npx -y github:bytesagain/mcp-server
+npx -y --package github:bytesagain/mcp-server bytesagain-mcp
 ```
 
 ### Run from source
@@ -50,7 +50,7 @@ docker run --rm -i bytesagain-mcp
   "mcpServers": {
     "bytesagain": {
       "command": "npx",
-      "args": ["-y", "github:bytesagain/mcp-server"]
+      "args": ["-y", "--package", "github:bytesagain/mcp-server", "bytesagain-mcp"]
     }
   }
 }
